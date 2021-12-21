@@ -1,0 +1,19 @@
+{
+  "name": "kickstart-campaign-blockchain",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:thiduzz/crowdfunding-blockchain.git",
+  "author": "Thiago <thiduzz14@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "ganache": "^6.4.5",
+    "ganache-core": "^2.13.2",
+    "jest": "^27.4.3",
+    "solc": "^0.8.10",
+    "typescript": "^4.1.2",
+    "web-vitals": "^1.0.1",
+    "web3": "^1.6.1",
+    "web3-core": "^1.6.1",
+    "web3-utils": "^1.6.1"
+  }
+}
