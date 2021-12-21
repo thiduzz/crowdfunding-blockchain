@@ -23,6 +23,7 @@ contract Campaign {
         uint necessaryApprovals;
         uint approvals;
         bool approved;
+        bool executed;
     }
 
     address public manager;
@@ -85,20 +86,34 @@ contract Campaign {
 
 
     function approve(uint requestId) public payable  {
+        (SpendRequest memory request, int index) = findRequestById(requestId);
+        require(
+            index > 0,
+            "Request does not exists"
+        );
+        request.approvals = request.approvals + 1;
+        request.approved = request.approvals >= request.necessaryApprovals;
+        requests[uint(index)] = request;
+        
+    }
 
-        bool found = false;
-        for (uint i = 0; i < requests.length; i++) {
-            SpendRequest memory request = requests[i];
-            if(request.id == requestId){
-                found = true;
-                request.approvals = request.approvals + 1;
-                requests[i].approved = request.approvals >= request.necessaryApprovals;
-            }
-        }
-            require(
-                !found,
-                "Identifier of Request does not exists"
-            );
+    function executeRequest(uint requestId) public payable  {
+        (SpendRequest memory request, int index) = findRequestById(requestId);
+        require(
+            index > 0,
+            "Request does not exists"
+        );
+        require(
+            request.approved,
+            "Request is not approved"
+        );
+        require(
+            !request.executed,
+            "Request has been already executed"
+        );
+        request.destination.transfer(request.amount);
+        request.executed = true;
+        requests[uint(index)] = request;
     }
 
     function contribute(uint planIndex) public payable validateContribution(planIndex) {
@@ -115,9 +130,18 @@ contract Campaign {
 
     function createRequest(uint _id,string memory _name, uint _amount,  address payable _destination) public restrictedToManager {
 
-        uint _necessaryApprovals = getFundersCount();
+        uint _necessaryApprovals = uint(getFundersCount() / 50) * 100; // will ceil by truncating decimals
 
-        requests.push(SpendRequest({id: _id, name: _name, amount: _amount, destination: _destination, necessaryApprovals: _necessaryApprovals, approvals: 0, approved: false }));
+        requests.push(SpendRequest({
+            id: _id,
+             name: _name,
+              amount: _amount,
+              destination: _destination,
+               necessaryApprovals: _necessaryApprovals,
+               approvals: 0,
+               approved: _necessaryApprovals == 0,
+                executed: false
+        }));
     }
 
 
@@ -134,6 +158,18 @@ contract Campaign {
             }
         }
         return total;
+    }
+
+    function findRequestById(uint id) view private returns (SpendRequest memory, int){
+
+        for (uint i = 0; i < requests.length; i++) {
+            SpendRequest memory request = requests[i];
+            if(request.id == id){
+                return (request, int(i));
+            }
+        }
+        SpendRequest memory noReturnObj;
+        return (noReturnObj, -1);
     }
 
 }
