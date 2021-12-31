@@ -156,11 +156,13 @@ contract Campaign {
         planIds.push(_id);
     }
 
-    function close() public campaignNotClosed restrictedToManager {
+    function close() public campaignNotClosed restrictedToManager returns(bytes memory) {
         require(valueGoal > address(this).balance,
             "Campaign can't be closed without reaching its value");
         closed = true;
-
+        (bool sent, bytes memory data) =  manager.call{value: address(this).balance}("");
+        require(sent, "Failed to send Ether");
+        return data;
     }
 
     function createRequest(uint _id,string memory _name, uint _amount,  address payable _destination) public campaignNotClosed restrictedToManager requestDoesntExists(_id) {
