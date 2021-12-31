@@ -26,8 +26,12 @@ contract Campaign {
 
     address public manager;
     uint public valueGoal;
-    uint globalFundersCount;
+    bool public closed;
+    uint contributionsCount;
+
+    uint[] public planIds;
     mapping(uint => Plan) public plans;
+    uint[] public requestIds;
     mapping(uint => SpendRequest) public requests;
 
 
@@ -49,6 +53,15 @@ contract Campaign {
         require(
             plan.id == 0,
             "Identifier of Plan already exists"
+        );
+        _;
+    }
+
+    modifier campaignNotClosed() {
+
+        require(
+            closed == false,
+            "Campaign is already closed"
         );
         _;
     }
@@ -102,12 +115,12 @@ contract Campaign {
             "Request was already approved by address"
         );
         request.approvers[msg.sender] = true;
-        request.approversCount = request.approversCount + 1;
+        request.approversCount++;
         request.approved = request.approversCount >= request.necessaryApprovals;
 
     }
 
-    function executeRequest(uint requestId) public payable  {
+    function executeRequest(uint requestId) public payable campaignNotClosed {
         (SpendRequest storage request, bool found) = findRequestById(requestId);
         require(
             found,
@@ -125,12 +138,13 @@ contract Campaign {
         request.executed = true;
     }
 
-    function contribute(uint planIndex) public payable validateContribution(planIndex) {
+    function contribute(uint planIndex) public payable campaignNotClosed validateContribution(planIndex) {
         plans[planIndex].funders[msg.sender] = true;
-        plans[planIndex].fundersCount = plans[planIndex].fundersCount + 1;
+        plans[planIndex].fundersCount++;
+        contributionsCount++;
     }
 
-    function createPlan(uint _id, uint _amount, string memory _name, bool _votable) public restrictedToManager planDoesntExists(_id) {
+    function createPlan(uint _id, uint _amount, string memory _name, bool _votable) public campaignNotClosed restrictedToManager planDoesntExists(_id) {
         require(_id > 0,
             "Identifier has to be greater than zero");
         Plan storage newPlan = plans[_id];
@@ -139,12 +153,20 @@ contract Campaign {
         newPlan.name = _name;
         newPlan.votable = _votable;
         newPlan.fundersCount = 0;
+        planIds.push(_id);
     }
 
-    function createRequest(uint _id,string memory _name, uint _amount,  address payable _destination) public restrictedToManager requestDoesntExists(_id) {
+    function close() public campaignNotClosed restrictedToManager {
+        require(valueGoal > address(this).balance,
+            "Campaign can't be closed without reaching its value");
+        closed = true;
+
+    }
+
+    function createRequest(uint _id,string memory _name, uint _amount,  address payable _destination) public campaignNotClosed restrictedToManager requestDoesntExists(_id) {
         require(_id > 0,
             "Identifier has to be greater than zero");
-        uint _necessaryApprovals = uint(globalFundersCount / 50) * 100; // will ceil by truncating decimals
+        uint _necessaryApprovals = uint(contributionsCount / 50) * 100; // will ceil by truncating decimals
         SpendRequest storage newRequest = requests[_id];
         newRequest.id = _id;
         newRequest.amount = _amount;
@@ -153,11 +175,22 @@ contract Campaign {
         newRequest.necessaryApprovals = _necessaryApprovals;
         newRequest.approved = _necessaryApprovals == 0;
         newRequest.executed = false;
+        requestIds.push(_id);
     }
 
 
     function getValue() public view returns(uint) {
         return address(this).balance;
+    }
+
+
+    function getPlanIds() public view returns (uint[] memory) {
+        return planIds;
+    }
+
+
+    function getRequestIds() public view returns (uint[] memory) {
+        return requestIds;
     }
 
     function findRequestById(uint id) view private returns (SpendRequest storage, bool){
