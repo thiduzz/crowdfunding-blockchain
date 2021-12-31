@@ -47,7 +47,7 @@ contract Campaign {
     modifier planDoesntExists(uint id) {
         Plan storage plan = plans[id];
         require(
-            plan.id != 0,
+            plan.id == 0,
             "Identifier of Plan already exists"
         );
         _;
@@ -57,7 +57,7 @@ contract Campaign {
 
         SpendRequest storage request = requests[id];
         require(
-            request.id != 0,
+            request.id == 0,
             "Request already exists"
         );
         _;
