@@ -75,6 +75,10 @@ contract Campaign {
             msg.value == plan.amount,
             string(abi.encodePacked( "Plan ",plan.name, " requires ", plan.amount, " eth"))
         );
+        require(
+            !plan.funders[msg.sender],
+            "Plan was already subscribed by address"
+        );
         _;
     }
 
@@ -92,6 +96,10 @@ contract Campaign {
         require(
             !request.approved,
             "Request is already approved"
+        );
+        require(
+            !request.approvers[msg.sender],
+            "Request was already approved by address"
         );
         request.approvers[msg.sender] = true;
         request.approversCount = request.approversCount + 1;
