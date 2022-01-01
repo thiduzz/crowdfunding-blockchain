@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "lib": ["ES2018", "DOM"],
+    "module": "esnext",
+    "target": "es5",
+    "moduleResolution": "node",
+    "strict": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "types": ["@types/node", "@types/chai", "@types/mocha"],
+    "typeRoots": ["./node_modules/@types", "./types/**/*.ts"]
+  },
+  "include": [
+    "./migrations/*.ts",
+    "./src/types/truffle"
+  ]
+}
