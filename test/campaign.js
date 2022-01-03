@@ -3,14 +3,13 @@ const CampaignFactory = artifacts.require("CampaignFactory");
 
 contract("Campaign", function ([deployer, manager, user]) {
   let campaignContract;
+  beforeEach(async () => {
 
-  before(async () => {
-    const factoryContract = await CampaignFactory.deployed({from: deployer});
-    await factoryContract.createCampaign(1000,{from: manager});
-    const campaigns = await factoryContract.getCampaigns();
+    const factoryInstance = await CampaignFactory.new({from: deployer})
+    await factoryInstance.createCampaign(1000,{from: manager});
+    const campaigns = await factoryInstance.getCampaigns();
     campaignContract = await Campaign.at(campaigns[campaigns.length - 1])
   })
-
 
   it("manager be able to create plans", async function () {
     const id = 1212;
@@ -34,6 +33,8 @@ contract("Campaign", function ([deployer, manager, user]) {
       expect(errorPermission.message).to.include("This function is restricted to the contract's owner");
     }
     const value = await campaignContract.plans(id)
+    const planIds = await campaignContract.getPlanIds()
     expect(value.id.toNumber()).to.equal(0)
+    expect(planIds).length(0)
   });
 });
