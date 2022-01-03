@@ -33,15 +33,17 @@
     "importHelpers": true,
     "noFallthroughCasesInSwitch": true,
     "types": ["@types/node", "@types/chai", "@types/mocha"],
-    "typeRoots": ["./node_modules/@types", "./types"]
+    "typeRoots": [
+      "../node_modules/@types", "./types"]
   },
   "include": [
     "**/*.ts",
-    "./src/types/truffle",
+    "../src/types/truffle",
     "migrations/**.js",
     "artifacts",
     "truffle-config.js",
     "./test/"
   ],
-  "exclude": ["node_modules", "build", "cache"]
+  "exclude": [
+    "../node_modules", "build", "cache"]
 }
