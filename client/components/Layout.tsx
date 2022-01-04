@@ -31,7 +31,7 @@ const Layout = ({ children, title = 'This is the default title' }: Props) => (
       </nav>
     </header>
     {children}
-    <footer>
+    <footer className="bg-red-300">
       <hr />
       <span>I'm here to stay (Footer)</span>
     </footer>
