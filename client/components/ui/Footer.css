@@ -1,0 +1,4 @@
+footer{
+    box-shadow: 0 0 10px rgb(0 0 0 / 0.2);
+    @apply bg-white h-10 flex justify-between items-center px-10 w-full;
+}

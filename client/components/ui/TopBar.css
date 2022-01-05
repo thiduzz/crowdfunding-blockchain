@@ -1,0 +1,6 @@
+.top-bar{
+    @apply sticky bg-white h-10 shadow-md flex justify-between items-center px-10;
+    a{
+        @apply text-red-500;
+    }
+}

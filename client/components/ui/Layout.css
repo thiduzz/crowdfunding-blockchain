@@ -1,0 +1,6 @@
+.layout-wrapper{
+    @apply flex flex-col h-screen;
+    .layout-content{
+        @apply flex-1 overflow-y-auto;
+    }
+}
