@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next'
 import Link from 'next/link'
 
-import Layout from '@/components/ui/Layout'
+import Layout from '@/components/UI/Layout'
 import { Campaign } from '../../interfaces'
 import { sampleCampaignData } from '../../utils/sample-data'
 import List from '../../components/List'

@@ -1,6 +1,6 @@
 import { GetStaticProps, GetStaticPaths } from 'next'
 
-import Layout from '@/components/ui/Layout'
+import Layout from '@/components/UI/Layout'
 import { Campaign } from '../../interfaces'
 import { sampleCampaignData } from '../../utils/sample-data'
 import ListDetail from '../../components/ListDetail'
