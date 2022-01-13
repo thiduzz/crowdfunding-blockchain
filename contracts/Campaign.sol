@@ -24,20 +24,25 @@ contract Campaign {
         bool executed;
     }
 
-    address public manager;
-    uint public valueGoal;
-    bool public closed;
-    uint contributionsCount;
+    struct Meta {
+        string name;
+        string description;
+        string imageUrl;
+        uint valueGoal;
+        bool closed;
+    }
 
+    Meta public metadata;
+    address public manager;
+    uint contributionsCount;
     uint[] public planIds;
     mapping(uint => Plan) public plans;
     uint[] public requestIds;
     mapping(uint => SpendRequest) public requests;
 
-
-    constructor(uint _valueGoal, address _manager) {
+    constructor(Meta memory _metadata, address _manager) {
         manager = _manager;
-        valueGoal = _valueGoal;
+        metadata = _metadata;
     }
 
     modifier restrictedToManager() {
@@ -60,7 +65,7 @@ contract Campaign {
     modifier campaignNotClosed() {
 
         require(
-            closed == false,
+            metadata.closed == false,
             "Campaign is already closed"
         );
         _;
@@ -75,8 +80,6 @@ contract Campaign {
         );
         _;
     }
-
-
 
     modifier validateContribution(uint planId) {
         Plan storage plan = plans[planId];
@@ -157,9 +160,9 @@ contract Campaign {
     }
 
     function close() public campaignNotClosed restrictedToManager returns(bytes memory) {
-        require(valueGoal > address(this).balance,
+        require(metadata.valueGoal > address(this).balance,
             "Campaign can't be closed without reaching its value");
-        closed = true;
+        metadata.closed = true;
         (bool sent, bytes memory data) =  manager.call{value: address(this).balance}("");
         require(sent, "Failed to send Ether");
         return data;

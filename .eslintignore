@@ -6,3 +6,4 @@ test/
 migrations/
 build/
 client/*.js
+truffle-config.js

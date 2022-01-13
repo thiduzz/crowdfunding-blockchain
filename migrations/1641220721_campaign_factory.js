@@ -1,5 +1,5 @@
-const CampaignFactoryMigration = artifacts.require("CampaignFactory");
+const CampaignFactoryMigration = artifacts.require('CampaignFactory')
 
-module.exports = function (deployer) {
-  deployer.deploy(CampaignFactoryMigration);
-};
+module.exports = async function (deployer) {
+  const factoryContract = await deployer.deploy(CampaignFactoryMigration)
+}
