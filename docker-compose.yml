@@ -1,0 +1,12 @@
+version: '3.1'
+services:
+  ipfs:
+    container_name: 'ipfs-test-node'
+    image: 'ipfs/go-ipfs:latest'
+    ports:
+      - '8080:8080'
+      - '4001:4001'
+      - '5001:5001'
+    volumes:
+      - ./.docker/ipfs/export:/export
+      - ./.docker/ipfs/data:/data/ipfs
