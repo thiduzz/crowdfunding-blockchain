@@ -48,7 +48,7 @@ const TextArea = ({
           name={name}
           placeholder={placeholder}
           onChange={onChangeHandler}
-          value={value}
+          value={text}
           rows={rows}
         />
       </div>

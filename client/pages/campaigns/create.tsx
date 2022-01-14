@@ -1,8 +1,9 @@
 import Layout from '@/components/UI/Layout'
 import Input from '@/components/UI/Input'
-import { BiBulb, BiBullseye, BiText } from 'react-icons/bi'
+import { BiBulb, BiBullseye, BiSave, BiText } from 'react-icons/bi'
 import TextArea from '@/components/UI/TextArea'
 import Button from '@/components/UI/Button'
+import { useState } from 'react'
 import { getContract } from '../../lib/web3'
 import useWeb3 from '../../hooks/useWeb3'
 import { CampaignFactory } from '../../types/web3/CampaignFactory'
@@ -10,14 +11,18 @@ import { CampaignFactory } from '../../types/web3/CampaignFactory'
 const CreateCampaignPage = () => {
   const { accounts } = useWeb3()
 
+  const [name, setName] = useState<string>('')
+  const [description, setDescription] = useState<string>('')
+  const [value, setValue] = useState<string>('10000')
+
   const handlerCreateCampaign = async () => {
     const contract = (await getContract('Factory')) as CampaignFactory
     await contract.methods
       .createCampaign(
-        'test campaign',
-        'description',
+        name,
+        description,
         'https://picsum.photos/seed/crypto/500/500',
-        20000000,
+        value,
       )
       .send({ from: accounts[0], gas: 6721975, chainId: 1337 })
   }
@@ -43,7 +48,7 @@ const CreateCampaignPage = () => {
               label="Name"
               placeholder="Campaign name..."
               value=""
-              onChange={(val) => console.log(val)}
+              onChange={(_name) => setName(_name)}
               icon={<BiBulb />}
             />
             <TextArea
@@ -51,19 +56,22 @@ const CreateCampaignPage = () => {
               label="Description"
               placeholder="Campaign description..."
               value=""
-              onChange={(val) => console.log(val)}
+              onChange={(_description) => setDescription(_description)}
               icon={<BiText />}
             />
             <Input
               name="campaignValue"
-              label="Value Goal in Eth"
-              value=""
+              label="Value Goal in Wei"
+              value={value}
               type="number"
-              onChange={(val) => console.log(val)}
+              placeholder="Min. value 10000 wei"
+              onChange={(_valueGoal) => setValue(_valueGoal)}
               icon={<BiBullseye />}
             />
           </form>
-          <Button onClick={handlerCreateCampaign}>Create Campaign</Button>
+          <Button onClick={handlerCreateCampaign}>
+            <BiSave className="text-white mr-3" /> Create Campaign
+          </Button>
         </div>
       </div>
     </Layout>
