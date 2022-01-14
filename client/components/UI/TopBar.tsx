@@ -12,15 +12,17 @@ const TopBar = ({ children }: Props) => (
         <a>Home</a>
       </Link>{' '}
       |{' '}
-      <Link href="/campaigns">
-        <a>Campaigns</a>
-      </Link>{' '}
-      |{' '}
       <Link href="/about">
         <a>About</a>
-      </Link>{' '}
-      | <a href="/api/campaigns">Campaigns API</a>
+      </Link>
     </nav>
+    <menu>
+      <div>
+        <Link href="/campaigns/create" passHref>
+          <button type="button">Create Campaign</button>
+        </Link>
+      </div>
+    </menu>
   </header>
 )
 

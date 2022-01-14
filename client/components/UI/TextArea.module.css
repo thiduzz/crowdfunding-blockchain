@@ -1,0 +1,28 @@
+
+.textAreaContainer{
+    @apply w-full;
+
+    &.withIcon{
+        .textarea{
+            @apply text-sm placeholder-gray-500 pl-10 pr-4 rounded-2xl border border-gray-400 w-full py-2;
+            &:focus{
+                @apply outline-none border-blue-400;
+            }
+        }
+    }
+
+    .iconWrapper{
+        @apply inline-flex items-start justify-center absolute left-0 top-0 pt-3 h-full w-10 text-gray-400;
+    }
+
+    .textarea{
+        @apply text-sm placeholder-gray-500 pl-4 pr-4 rounded-2xl border border-gray-400 w-full py-2;
+        &:focus{
+            @apply outline-none border-blue-400;
+        }
+    }
+
+    .label{
+        @apply mb-1 text-xs tracking-wide text-gray-600;
+    }
+}
