@@ -1,7 +1,7 @@
 import buttonStyles from './Button.module.css'
 
 type Props = {
-  appearance: 'default' | 'cta'
+  appearance?: 'default' | 'cta'
   children?: React.ReactNode
   onClick: (event: React.MouseEvent<HTMLElement>) => void
 }

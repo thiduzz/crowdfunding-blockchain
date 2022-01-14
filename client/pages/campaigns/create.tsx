@@ -63,7 +63,7 @@ const CreateCampaignPage = () => {
               icon={<BiBullseye />}
             />
           </form>
-          <Button onClick={(e) => console.log(e)}>Create Campaign</Button>
+          <Button onClick={handlerCreateCampaign}>Create Campaign</Button>
         </div>
       </div>
     </Layout>
