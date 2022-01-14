@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react'
 import Link from 'next/link'
+import Button from '@/components/UI/Button'
 
 type Props = {
   children?: ReactNode
@@ -19,7 +20,7 @@ const TopBar = ({ children }: Props) => (
     <menu>
       <div>
         <Link href="/campaigns/create" passHref>
-          <button type="button">Create Campaign</button>
+          <Button appearance="menu">Create Campaign</Button>
         </Link>
       </div>
     </menu>
