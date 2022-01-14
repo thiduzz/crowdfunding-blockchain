@@ -1,6 +1,9 @@
 .top-bar{
     @apply sticky bg-white h-10 shadow-md flex justify-between items-center px-10;
     a{
-        @apply text-red-500;
+        @apply mx-5 text-blue-500 rounded-2xl bg-white text-xs px-5 py-1 transition duration-150 ease-in;
+        &:hover{
+            @apply bg-gray-200 text-gray-300;
+        }
     }
 }

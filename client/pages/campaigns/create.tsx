@@ -40,7 +40,7 @@ const CreateCampaignPage = () => {
 
   return (
     <Layout title="Campaign Create | Crowdfunding">
-      <div className="flex items-center justify-center flex-col">
+      <div className="flex items-center justify-center flex-col h-full">
         <div>
           <form>
             <Input

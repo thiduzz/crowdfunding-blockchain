@@ -11,8 +11,7 @@ const TopBar = ({ children }: Props) => (
     <nav>
       <Link href="/">
         <a>Home</a>
-      </Link>{' '}
-      |{' '}
+      </Link>
       <Link href="/about">
         <a>About</a>
       </Link>
